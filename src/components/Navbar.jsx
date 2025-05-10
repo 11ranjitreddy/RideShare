@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Navigation, UserCircle, ChevronDown } from 'lucide-react'
+import { Navigation, UserCircle, ChevronDown, UserCog } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -21,7 +21,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 hover:opacity-80">
             <Navigation size={28} />
-            <span className="font-bold text-xl">RideShare</span>
+            <span className="font-bold text-xl">Vahana</span>
           </Link>
           
           {/* Main Navigation */}
@@ -40,6 +40,14 @@ const Navbar = () => {
             
             <Link to="/contact">
               <button className="font-medium hover:text-white transition-colors">Contact</button>
+            </Link>
+
+            {/* Admin Link - Added to main navigation */}
+            <Link to="/admin">
+              <button className="font-medium hover:text-white transition-colors flex items-center">
+                <UserCog size={20} className="mr-1" />
+                Admin
+              </button>
             </Link>
           </div>
           
@@ -77,6 +85,16 @@ const Navbar = () => {
                       onClick={closeDropdown}
                     >
                       Sign Up
+                    </button>
+                  </Link>
+                  {/* Added Admin link to dropdown for mobile users */}
+                  <Link to="/admin">
+                    <button 
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left flex items-center"
+                      onClick={closeDropdown}
+                    >
+                      <UserCog size={16} className="mr-2" />
+                      Admin
                     </button>
                   </Link>
                 </div>
