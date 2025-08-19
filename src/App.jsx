@@ -7,7 +7,7 @@ import RideBookingPage from './components/RideBookingPage'
 import Services from './components/Services'
 import About from './components/About'
 import Contact from './components/Contact'
-import Admin from './components/Admin'
+//import Admin from './components/Admin'
 const App = () => {
   return (
     <div>
@@ -20,7 +20,7 @@ const App = () => {
           <Route path="/services" element={<Services/>}/>
           <Route path="/about" element={<About />} />
           <Route path="/Contact" element={<Contact/>}/>
-          <Route path="/admin" element={<Admin />}/>
+        
         </Routes>
       </Router>
     </div>
