@@ -1,100 +1,19 @@
 pipeline {
     agent any
-    
-    environment {
-        // Define environment variables
-        PROJECT_NAME = 'vahana-project'
-        VERSION = '1.0.0'
-    }
-    
-    tools {
-        // Define tools (adjust based on your project)
-        jdk 'jdk11'
-        maven 'maven-3.8.1'
-    }
-    
+    // REMOVE the 'tools' block since we don't have jdk11 or maven configured in Jenkins
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    credentialsId: 'github-credentials',
-                    url: 'https://github.com/your-username/vahana-project.git'
-            }
-        }
-        
-        stage('Build') {
+        stage('Build and Test') {
             steps {
                 script {
-                    // Adjust based on your project type
-                    if (fileExists('pom.xml')) {
-                        sh 'mvn clean compile'
-                    } else if (fileExists('build.gradle')) {
-                        sh 'gradle build'
-                    } else if (fileExists('package.json')) {
-                        sh 'npm install'
-                        sh 'npm run build'
-                    }
+                    // Check available tools
+                    bat 'java --version'
+                    // Install Maven manually for this build (Windows example)
+                    bat 'curl -o apache-maven-3.8.1-bin.zip https://archive.apache.org/dist/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.zip'
+                    bat 'tar -xf apache-maven-3.8.1-bin.zip'
+                    bat 'set PATH=apache-maven-3.8.1\\bin;%PATH% && mvn --version'
+                    bat 'set PATH=apache-maven-3.8.1\\bin;%PATH% && mvn clean package'
                 }
             }
-        }
-        
-        stage('Test') {
-            steps {
-                script {
-                    if (fileExists('pom.xml')) {
-                        sh 'mvn test'
-                    } else if (fileExists('build.gradle')) {
-                        sh 'gradle test'
-                    } else if (fileExists('package.json')) {
-                        sh 'npm test'
-                    }
-                }
-            }
-            post {
-                always {
-                    junit '**/target/surefire-reports/*.xml' // Adjust path as needed
-                }
-            }
-        }
-        
-        stage('Package') {
-            steps {
-                script {
-                    if (fileExists('pom.xml')) {
-                        sh 'mvn package -DskipTests'
-                    } else if (fileExists('build.gradle')) {
-                        sh 'gradle assemble -x test'
-                    }
-                    // Archive the built artifact
-                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-                }
-            }
-        }
-        
-        stage('Deploy') {
-            steps {
-                script {
-                    // Add your deployment logic here
-                    // This could be deploying to a server, container registry, etc.
-                    echo 'Deploying Vahana project...'
-                    
-                    // Example: Deploy to a server via SSH
-                    // sshagent(['deploy-credentials']) {
-                    //     sh 'scp target/*.jar user@server:/path/to/deploy/'
-                    // }
-                }
-            }
-        }
-    }
-    
-    post {
-        success {
-            echo 'Pipeline completed successfully!'
-            // Add notifications (Slack, Email, etc.)
-        }
-        failure {
-            echo 'Pipeline failed!'
-            // Add failure notifications
         }
     }
 }
