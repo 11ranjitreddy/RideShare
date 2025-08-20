@@ -11,7 +11,7 @@ import Contact from './components/Contact'
 const App = () => {
   return (
     <div>
-      <Router>
+      <Router  basename="/rideshare-frontend">
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/signin' element={<SignIn/>}/>
